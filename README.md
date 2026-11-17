@@ -7,3 +7,5 @@ and working through beginner CTF-style challenges.
 
 The focus is on concepts, mistakes, and lessons learned — not solutions
 or walkthroughs.
+## Notes
+- [Compression vs Encoding](notes/compression-vs-encoding.md)
