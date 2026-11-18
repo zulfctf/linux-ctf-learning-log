@@ -11,6 +11,7 @@ The goal is to document concepts, common pitfalls, and repeatable practice exerc
 | [01 — File permissions](labs/linux-file-permissions.md) | `chmod`, ownership, directory traversal, permission checks |
 | [02 — File identification and encoding](labs/file-identification-and-encoding.md) | `file`, `xxd`, Base64, gzip, tar, format-first investigation |
 | [03 — Process inspection and signals](labs/process-inspection-and-signals.md) | `ps`, PIDs, process states, `SIGTERM`, safe cleanup |
+| [04 — SHA-256 integrity checks](labs/checksums-and-integrity.md) | `sha256sum`, trusted baselines, tamper detection, checksum limitations |
 
 ## Concept notes
 
