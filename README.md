@@ -13,6 +13,23 @@ The goal is to document concepts, common pitfalls, and repeatable practice exerc
 | [03 — Process inspection and signals](labs/process-inspection-and-signals.md) | `ps`, PIDs, process states, `SIGTERM`, safe cleanup |
 | [04 — SHA-256 integrity checks](labs/checksums-and-integrity.md) | `sha256sum`, trusted baselines, tamper detection, checksum limitations |
 
+## Executable tools and tests
+
+- [SHA-256 integrity manifest CLI](tools/integrity_manifest.py) — create and verify JSON manifests for files in a local directory using Python's standard library.
+- [CLI regression tests](tests/test_integrity_manifest.py) — check intact/modified/missing files, invalid manifests, and path traversal protections.
+
+Requires **Python 3.9+**. Try it with a disposable directory:
+
+```bash
+mkdir -p /tmp/ctf-manifest-demo
+printf 'hello\n' > /tmp/ctf-manifest-demo/hello.txt
+python3 tools/integrity_manifest.py create /tmp/ctf-manifest-demo /tmp/ctf-manifest.json
+python3 tools/integrity_manifest.py verify /tmp/ctf-manifest-demo /tmp/ctf-manifest.json
+python3 -m unittest discover -s tests -v
+```
+
+The manifest records the hashes of files present when it was created. Verification checks those recorded entries; it **does not detect newly added files**. Symlinks are excluded from manifest creation, and verification rejects paths that escape the selected root. This is a learning tool, not a substitute for a signed, trusted manifest or a production-grade file integrity monitor. Tests are supplied but execution results should be recorded only after running them.
+
 ## Concept notes
 
 - [Compression vs Encoding](notes/compression-vs-encoding.md) — why Base64 differs from compression and how to inspect unfamiliar files.
