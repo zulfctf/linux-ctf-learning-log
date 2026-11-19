@@ -20,7 +20,8 @@ permissions:
 jobs:
   unittest:
     name: Python ${{ matrix.python-version }} on Ubuntu
-    runs-on: ubuntu-latest
+    # Pin the runner so the Python 3.9 matrix remains installable as ubuntu-latest evolves.
+    runs-on: ubuntu-24.04
     timeout-minutes: 5
     strategy:
       fail-fast: false
