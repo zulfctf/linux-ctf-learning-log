@@ -80,5 +80,33 @@ class ManifestTests(unittest.TestCase):
         self.assertEqual(self.run_cli("verify").returncode, 2)
 
 
+    def test_reject_noncanonical_paths(self):
+        for name in ("nested//hello.txt", "./nested/hello.txt", "nested/../hello.txt", "nested\\\\hello.txt"):
+            with self.subTest(name=name):
+                self.manifest.write_text(json.dumps({
+                    "algorithm": "sha256", "files": {name: "0" * 64}
+                }))
+                self.assertEqual(self.run_cli("verify").returncode, 2)
+
+    def test_reject_unsupported_algorithm(self):
+        self.manifest.write_text(json.dumps({
+            "algorithm": "md5", "files": {"nested/hello.txt": "0" * 64}
+        }))
+        self.assertEqual(self.run_cli("verify").returncode, 2)
+
+    def test_create_skips_manifest_inside_root(self):
+        self.manifest = self.root / "manifest.json"
+        self.assertEqual(self.run_cli("create").returncode, 0)
+        document = json.loads(self.manifest.read_text())
+        self.assertNotIn("manifest.json", document["files"])
+        self.assertEqual(self.run_cli("verify").returncode, 0)
+
+    def test_detects_empty_manifest_without_crashing(self):
+        self.manifest.write_text(json.dumps({"algorithm": "sha256", "files": {}}))
+        result = self.run_cli("verify")
+        self.assertEqual(result.returncode, 0)
+        self.assertIn("Verified 0 entries", result.stdout)
+
+
 if __name__ == "__main__":
     unittest.main()
