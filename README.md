@@ -13,6 +13,7 @@ The goal is to document concepts, common pitfalls, and repeatable practice exerc
 | [03 — Process inspection and signals](labs/process-inspection-and-signals.md) | `ps`, PIDs, process states, `SIGTERM`, safe cleanup |
 | [04 — SHA-256 integrity checks](labs/checksums-and-integrity.md) | `sha256sum`, trusted baselines, tamper detection, checksum limitations |
 | [05 — Safe log filtering and pipelines](labs/safe-log-filtering-and-pipelines.md) | `grep`, `awk`, synthetic logs, Bash `pipefail`, and failure detection |
+| [06 — Safe shell quoting and filenames](labs/safe-shell-quoting-and-filenames.md) | Quoting, leading dashes, newline filenames, `find -print0`, and `xargs -0` |
 
 ## Executable tools and tests
 
