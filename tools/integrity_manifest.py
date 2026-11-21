@@ -66,7 +66,7 @@ def create(root: Path, manifest: Path) -> int:
     return 0
 
 
-def verify(root: Path, manifest: Path) -> int:
+def verify(root: Path, manifest: Path, strict: bool = False) -> int:
     document = json.loads(manifest.read_text(encoding="utf-8"))
     if not isinstance(document, dict) or document.get("algorithm") != "sha256":
         raise ValueError("unsupported manifest format or algorithm")
@@ -87,6 +87,20 @@ def verify(root: Path, manifest: Path) -> int:
         ok = actual == expected
         print(f"{'OK  ' if ok else 'FAIL'} {name}")
         failures += not ok
+    if strict:
+        # Compare a fresh snapshot with recorded paths. Use the same symlink
+        # policy as creation, and never include the manifest itself.
+        current = set()
+        for base, dirs, files in os.walk(root, followlinks=False):
+            dirs[:] = sorted(d for d in dirs if not (Path(base) / d).is_symlink())
+            for filename in files:
+                path = Path(base) / filename
+                if path.is_symlink() or not path.is_file() or path.resolve() == manifest:
+                    continue
+                current.add(path.relative_to(root).as_posix())
+        for extra in sorted(current - entries.keys()):
+            print(f"FAIL untracked file: {extra}")
+            failures += 1
     print(f"Verified {len(entries)} entries; {failures} failures")
     return 1 if failures else 0
 
@@ -96,13 +110,14 @@ def main(argv=None) -> int:
     parser.add_argument("action", choices=["create", "verify"])
     parser.add_argument("root", type=Path, help="directory to inspect")
     parser.add_argument("manifest", type=Path, help="JSON manifest path")
+    parser.add_argument("--strict", action="store_true", help="also fail on files not listed in the manifest when verifying")
     args = parser.parse_args(argv)
     try:
         root = args.root.resolve(strict=True)
         manifest = args.manifest.resolve()
         if not root.is_dir():
             raise ValueError("root must be a directory")
-        return create(root, manifest) if args.action == "create" else verify(root, manifest)
+        return create(root, manifest) if args.action == "create" else verify(root, manifest, strict=args.strict)
     except (OSError, ValueError, json.JSONDecodeError) as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 2
