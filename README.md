@@ -16,6 +16,7 @@ The goal is to document concepts, common pitfalls, and repeatable practice exerc
 | [06 — Safe shell quoting and filenames](labs/safe-shell-quoting-and-filenames.md) | Quoting, leading dashes, newline filenames, `find -print0`, and `xargs -0` |
 | [07 — Loopback TCP and listening sockets](labs/loopback-tcp-and-listening-sockets.md) | Local TCP endpoints, ephemeral ports, Python sockets, and `ss -ltn` |
 | [08 — Standard streams and redirection](labs/standard-streams-and-redirection.md) | stdout/stderr, file descriptors, redirection order, and exit statuses |
+| [09 — Hostname resolution and local resolver](labs/hostname-resolution-and-local-resolver.md) | `localhost`, `getaddrinfo`, `getent`, NSS vs DNS, loopback checks |
 
 ## Executable tools and tests
 
