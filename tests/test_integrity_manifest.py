@@ -23,9 +23,9 @@ class ManifestTests(unittest.TestCase):
         (self.root / "nested" / "hello.txt").write_bytes(b"hello\n")
         self.manifest = self.base / "manifest.json"
 
-    def run_cli(self, action):
+    def run_cli(self, action, *options):
         return subprocess.run(
-            [sys.executable, str(SCRIPT), action, str(self.root), str(self.manifest)],
+            [sys.executable, str(SCRIPT), action, str(self.root), str(self.manifest), *options],
             capture_output=True, text=True, check=False,
         )
 
@@ -79,6 +79,29 @@ class ManifestTests(unittest.TestCase):
         }))
         self.assertEqual(self.run_cli("verify").returncode, 2)
 
+
+    def test_strict_flags_untracked_file_without_changing_default(self):
+        self.assertEqual(self.run_cli("create").returncode, 0)
+        (self.root / "new.txt").write_text("new data", encoding="utf-8")
+        self.assertEqual(self.run_cli("verify").returncode, 0)
+        checked = self.run_cli("verify", "--strict")
+        self.assertEqual(checked.returncode, 1)
+        self.assertIn("FAIL untracked file: new.txt", checked.stdout)
+
+    def test_strict_excludes_manifest_and_symlinks(self):
+        self.manifest = self.root / "manifest.json"
+        self.assertEqual(self.run_cli("create").returncode, 0)
+        (self.root / "link").symlink_to(self.root / "nested" / "hello.txt")
+        checked = self.run_cli("verify", "--strict")
+        self.assertEqual(checked.returncode, 0, checked.stdout + checked.stderr)
+        self.assertNotIn("untracked file", checked.stdout)
+
+    def test_strict_detects_new_nested_file(self):
+        self.assertEqual(self.run_cli("create").returncode, 0)
+        (self.root / "nested" / "second.txt").write_text("extra", encoding="utf-8")
+        checked = self.run_cli("verify", "--strict")
+        self.assertEqual(checked.returncode, 1)
+        self.assertIn("nested/second.txt", checked.stdout)
 
     def test_reject_noncanonical_paths(self):
         for name in ("nested//hello.txt", "./nested/hello.txt", "nested/../hello.txt", "nested\\\\hello.txt"):
