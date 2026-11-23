@@ -18,6 +18,7 @@ The goal is to document concepts, common pitfalls, and repeatable practice exerc
 | [08 — Standard streams and redirection](labs/standard-streams-and-redirection.md) | stdout/stderr, file descriptors, redirection order, and exit statuses |
 | [09 — Hostname resolution and local resolver](labs/hostname-resolution-and-local-resolver.md) | `localhost`, `getaddrinfo`, `getent`, NSS vs DNS, loopback checks |
 | [10 — SSH host-key verification](labs/ssh-host-key-verification.md) | Offline Ed25519 fingerprints, `known_hosts`, changed keys, trust on first use |
+| [11 — Safe temporary workspaces](labs/safe-temporary-workspaces.md) | `mktemp -d`, restrictive `umask`, quoted paths, and `trap` cleanup |
 
 ## Executable tools and tests
 
