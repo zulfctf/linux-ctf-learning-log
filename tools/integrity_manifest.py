@@ -36,6 +36,14 @@ def safe_relative(name: str) -> Path:
 def confined_regular_file(root: Path, rel: Path) -> Path:
     """Resolve symlinks and refuse paths that escape the chosen root."""
     candidate = root / rel
+    # Manifest creation excludes symlinks. Apply the same policy when
+    # verifying, including symlinks in intermediate directory components.
+    # Otherwise a file could be replaced by a link after the baseline was made.
+    part_path = root
+    for part in rel.parts:
+        part_path = part_path / part
+        if part_path.is_symlink():
+            raise ValueError(f"symlink not allowed: {rel.as_posix()}")
     resolved = candidate.resolve(strict=True)
     if not resolved.is_relative_to(root):
         raise ValueError(f"path escapes root: {rel.as_posix()}")
