@@ -17,6 +17,7 @@ The goal is to document concepts, common pitfalls, and repeatable practice exerc
 | [07 — Loopback TCP and listening sockets](labs/loopback-tcp-and-listening-sockets.md) | Local TCP endpoints, ephemeral ports, Python sockets, and `ss -ltn` |
 | [08 — Standard streams and redirection](labs/standard-streams-and-redirection.md) | stdout/stderr, file descriptors, redirection order, and exit statuses |
 | [09 — Hostname resolution and local resolver](labs/hostname-resolution-and-local-resolver.md) | `localhost`, `getaddrinfo`, `getent`, NSS vs DNS, loopback checks |
+| [10 — SSH host-key verification](labs/ssh-host-key-verification.md) | Offline Ed25519 fingerprints, `known_hosts`, changed keys, trust on first use |
 
 ## Executable tools and tests
 
@@ -33,7 +34,7 @@ python3 tools/integrity_manifest.py verify /tmp/ctf-manifest-demo /tmp/ctf-manif
 python3 -m unittest discover -s tests -v
 ```
 
-The manifest records the hashes of files present when it was created. Verification checks those recorded entries; it **does not detect newly added files**. Symlinks are excluded from manifest creation, and verification rejects paths that escape the selected root. This is a learning tool, not a substitute for a signed, trusted manifest or a production-grade file integrity monitor. Tests are supplied but execution results should be recorded only after running them.
+The manifest records the hashes of files present when it was created. Verification checks those recorded entries; by default it **does not detect newly added files**. Add `--strict` to `verify` to also flag unexpected regular files. Symlinks are excluded from manifest creation, and verification rejects symlink substitutions and paths that escape the selected root. This is a learning tool, not a substitute for a signed, trusted manifest or a production-grade file integrity monitor. Tests are supplied but execution results should be recorded only after running them.
 
 ## Concept notes
 
