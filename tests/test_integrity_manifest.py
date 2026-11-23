@@ -65,6 +65,23 @@ class ManifestTests(unittest.TestCase):
         }))
         self.assertEqual(self.run_cli("verify").returncode, 1)
 
+    def test_reject_symlink_to_file_inside_root(self):
+        self.assertEqual(self.run_cli("create").returncode, 0)
+        source = self.root / "nested" / "hello.txt"
+        source.rename(self.root / "original.txt")
+        source.symlink_to(self.root / "original.txt")
+        result = self.run_cli("verify")
+        self.assertEqual(result.returncode, 1)
+        self.assertIn("symlink not allowed", result.stdout)
+
+    def test_reject_symlink_in_parent_directory(self):
+        self.assertEqual(self.run_cli("create").returncode, 0)
+        (self.root / "nested").rename(self.root / "real")
+        (self.root / "nested").symlink_to(self.root / "real", target_is_directory=True)
+        result = self.run_cli("verify")
+        self.assertEqual(result.returncode, 1)
+        self.assertIn("symlink not allowed", result.stdout)
+
     def test_create_skips_symlinks(self):
         outside = self.base / "outside.txt"
         outside.write_bytes(b"outside")
