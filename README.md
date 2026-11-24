@@ -20,6 +20,7 @@ The goal is to document concepts, common pitfalls, and repeatable practice exerc
 | [10 — SSH host-key verification](labs/ssh-host-key-verification.md) | Offline Ed25519 fingerprints, `known_hosts`, changed keys, trust on first use |
 | [11 — Safe temporary workspaces](labs/safe-temporary-workspaces.md) | `mktemp -d`, restrictive `umask`, quoted paths, and `trap` cleanup |
 | [12 — Inodes and filesystem links](labs/inodes-hard-links-and-symlinks.md) | Hard links, symlinks, inode metadata, and safe filesystem inspection |
+| [13 — Local HTTP response inspection](labs/local-http-response-inspection.md) | GET, HEAD, status codes, response headers, and curl exit status |
 
 ## Executable tools and tests
 
