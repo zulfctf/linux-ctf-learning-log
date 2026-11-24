@@ -22,6 +22,7 @@ The goal is to document concepts, common pitfalls, and repeatable practice exerc
 | [12 — Inodes and filesystem links](labs/inodes-hard-links-and-symlinks.md) | Hard links, symlinks, inode metadata, and safe filesystem inspection |
 | [13 — Local HTTP response inspection](labs/local-http-response-inspection.md) | GET, HEAD, status codes, response headers, and curl exit status |
 | [14 — JSON validation and duplicate keys](labs/json-validation-and-duplicate-keys.md) | Syntax, duplicate keys, strict decoding, and field validation |
+| [15 — Environment variables and inheritance](labs/environment-variables-and-inheritance.md) | Export, child processes, clean environments, and secret-handling cautions |
 
 ## Executable tools and tests
 
