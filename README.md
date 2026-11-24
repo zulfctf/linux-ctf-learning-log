@@ -23,6 +23,7 @@ The goal is to document concepts, common pitfalls, and repeatable practice exerc
 | [13 — Local HTTP response inspection](labs/local-http-response-inspection.md) | GET, HEAD, status codes, response headers, and curl exit status |
 | [14 — JSON validation and duplicate keys](labs/json-validation-and-duplicate-keys.md) | Syntax, duplicate keys, strict decoding, and field validation |
 | [15 — Environment variables and inheritance](labs/environment-variables-and-inheritance.md) | Export, child processes, clean environments, and secret-handling cautions |
+| [16 — Filesystem mount diagnostics](labs/filesystem-mount-diagnostics.md) | Mount options, disk space, safe write probes, and WSL troubleshooting |
 
 ## Executable tools and tests
 
